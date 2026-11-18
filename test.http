@@ -1,0 +1,125 @@
+
+### 1. Create product A (201 Created)
+# @name createA
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "Office Chair", "sku": "LAB-CH-001", "category": "Furniture", "price": 5499, "quantity": 3, "reorderLevel": 5, "supplier": "Godrej" }
+
+
+### 2. Create product B (201 Created) - this one will be deleted later
+# @name createB
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "Notebook A4", "sku": "LAB-NB-002", "category": "Stationery", "price": 60, "quantity": 100, "reorderLevel": 25, "supplier": "Classmate" }
+
+
+### 3. Get all products (total, page, totalPages, count)
+GET http://localhost:5000/api/products
+
+
+### 4. Get single product by ID (A)
+GET http://localhost:5000/api/products/{{createA.response.body.$.id}}
+
+
+### 5. Update product (A) - PUT
+PUT http://localhost:5000/api/products/{{createA.response.body.$.id}}
+Content-Type: application/json
+
+{ "name": "Office Chair Pro", "sku": "LAB-CH-001", "category": "Furniture", "price": 5999, "quantity": 8 }
+
+
+### 6. Restock +10 (A) - "Stock updated"
+PATCH http://localhost:5000/api/products/{{createA.response.body.$.id}}/stock
+Content-Type: application/json
+
+{ "change": 10 }
+
+
+### 7. Sale -3 (A) - "Stock updated"
+PATCH http://localhost:5000/api/products/{{createA.response.body.$.id}}/stock
+Content-Type: application/json
+
+{ "change": -3 }
+
+
+### 8. Low-stock report
+GET http://localhost:5000/api/products/low-stock
+
+
+### 9. Category-wise summary (aggregation)
+GET http://localhost:5000/api/products/summary
+
+
+### 10. Filter by category + price range + sort
+GET http://localhost:5000/api/products?category=Furniture&minPrice=1000&maxPrice=10000&sort=-price
+
+
+### 11. Sort by price (ascending)
+GET http://localhost:5000/api/products?sort=price
+
+
+### 12. Pagination (page 1, limit 2)
+GET http://localhost:5000/api/products?page=1&limit=2
+
+
+### 13. Search by name
+GET http://localhost:5000/api/products?search=chair
+
+
+### 14. Delete product (B) - "Product deleted"
+DELETE http://localhost:5000/api/products/{{createB.response.body.$.id}}
+
+
+### 15. Verify deleted product (404 Product not found)
+GET http://localhost:5000/api/products/{{createB.response.body.$.id}}
+
+
+### 16. Duplicate SKU (409)
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "Duplicate Chair", "sku": "LAB-CH-001", "category": "Furniture", "price": 100, "quantity": 1 }
+
+
+### 17. Negative price (400 Validation failed)
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "Bad Item", "sku": "LAB-BAD-003", "category": "Test", "price": -5, "quantity": 1 }
+
+
+### 18. Missing required fields (400 Validation failed)
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "No Price Item" }
+
+
+### 19. Sale more than available stock (400 Insufficient stock)
+PATCH http://localhost:5000/api/products/{{createA.response.body.$.id}}/stock
+Content-Type: application/json
+
+{ "change": -1000 }
+
+
+### 20. Invalid stock change value (400)
+PATCH http://localhost:5000/api/products/{{createA.response.body.$.id}}/stock
+Content-Type: application/json
+
+{ "change": 0 }
+
+
+### 21. Invalid ID format (400 Invalid product ID)
+GET http://localhost:5000/api/products/abc123
+
+
+### 22. Valid ID but not in database (404)
+GET http://localhost:5000/api/products/64b000000000000000000000
+
+### 23. Create low-stock product (201 Created)
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{ "name": "USB Cable", "sku": "LAB-UC-004", "category": "Electronics", "price": 199, "quantity": 2, "reorderLevel": 10, "supplier": "Belkin" }

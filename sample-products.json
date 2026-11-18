@@ -1,0 +1,6 @@
+[
+  {"name":"Study Table","sku":"FURN-TB-812","category":"Furniture","price":3999,"quantity":2,"reorderLevel":4,"supplier":"IKEA India"},
+  {"name":"Gel Pen Pack of 15","sku":"STNY-PN-713","category":"Stationery","price":120,"quantity":40,"reorderLevel":20,"supplier":"Cello Pens"},
+  {"name":"Wireless Mouse","sku":"ELEC-MS-101","category":"Electronics","price":799,"quantity":3,"reorderLevel":10,"supplier":"Logitech"},
+  {"name":"Cotton T-Shirt","sku":"APRL-TS-205","category":"Apparel","price":499,"quantity":50,"reorderLevel":15,"supplier":"Raymond"}
+]
